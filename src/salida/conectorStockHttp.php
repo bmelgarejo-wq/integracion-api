@@ -12,6 +12,7 @@ class conectorStockHttp implements conectorStock{
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $respuesta = curl_exec($ch);
+        curl_close($ch);
 
         // si no llegó a B, curl_exec devuelve false
         if ($respuesta === false){
