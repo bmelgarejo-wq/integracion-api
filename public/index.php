@@ -1,14 +1,14 @@
 <?php
 
-require_once __DIR__ . '/../src/moldes/venta.php';
-require_once __DIR__ . '/../src/moldes/ventaProducto.php';
-require_once __DIR__ . '/../src/moldes/movimientoProducto.php';
-require_once __DIR__ . '/../src/moldes/movimientoStock.php';
-require_once __DIR__ . '/../src/transformador/ventaAmovimiento.php';
+require_once __DIR__ . '/../src/DTO/venta.php';
+require_once __DIR__ . '/../src/DTO/ventaProducto.php';
+require_once __DIR__ . '/../src/DTO/movimientoProducto.php';
+require_once __DIR__ . '/../src/DTO/movimientoStock.php';
+require_once __DIR__ . '/../src/mapper/ventaAmovimiento.php';
 require_once __DIR__ . '/../src/salida/conectorStock.php';
 require_once __DIR__ . '/../src/salida/conectorStockHttp.php';
-require_once __DIR__ . '/../src/coordinacion/procesarVenta.php';
-require_once __DIR__ . '/../src/entrada/ventaControlador.php';
+require_once __DIR__ . '/../src/service/procesarVenta.php';
+require_once __DIR__ . '/../src/controller/ventaControlador.php';
 //conector mapper service controlador 
 
 $conector = new conectorStockHttp();
