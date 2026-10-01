@@ -35,7 +35,14 @@ class ventaControlador{
 
         // armo la venta con los datos del json y la lista de productos
         $venta=new venta($datos['ventaId'],$datos['fecha'], $datos['cajeroId'], $listaVentaProductos);
-        $this->coordinacion->procesar($venta);
+        $llego = $this->coordinacion->procesar($venta);
+
+        // si no llegó a B, respondo error 502
+        if (!$llego){
+            http_response_code(502);
+            echo json_encode(['mensaje' => 'No se pudo registrar el movimiento en el sistema de stock']);
+            return;
+        }
 
         http_response_code(200);
         echo json_encode(['mensaje' => 'Venta procesada correctamente']);

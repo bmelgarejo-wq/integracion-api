@@ -12,10 +12,10 @@ class procesarVenta {
         $this->conector = $conector;
     }
 
-    // recibe una venta, la transforma y la manda
-    public function procesar(venta $venta): void {
+    // recibe una venta, la transforma y la manda. Devuelve si llegó a B o no
+    public function procesar(venta $venta): bool {
         $movimiento = $this->transformador->transformar($venta); //venta a -> b
-        $this->conector->enviarMovimiento($movimiento);
+        return $this->conector->enviarMovimiento($movimiento);
     }
 }
 

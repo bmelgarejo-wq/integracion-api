@@ -1,7 +1,7 @@
 <?php
 
 class conectorStockHttp implements conectorStock{
-    public function enviarMovimiento(movimientoStock $movimiento): void{
+    public function enviarMovimiento(movimientoStock $movimiento): bool{
         $datos = $movimiento->paraEnviar();
         $json = json_encode($datos);
 
@@ -12,6 +12,12 @@ class conectorStockHttp implements conectorStock{
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $respuesta = curl_exec($ch);
+
+        // si no llegó a B, curl_exec devuelve false
+        if ($respuesta === false){
+            return false;
+        }
+        return true;
     }
 }
 

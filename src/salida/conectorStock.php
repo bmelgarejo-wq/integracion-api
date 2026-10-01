@@ -1,7 +1,7 @@
 <?php
 
 interface conectorStock{
-    public function enviarMovimiento(movimientoStock $movimiento): void;
+    public function enviarMovimiento(movimientoStock $movimiento): bool;
 }
 
 ?>
