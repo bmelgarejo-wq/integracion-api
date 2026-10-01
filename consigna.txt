@@ -1,0 +1,65 @@
+El cliente posee dos sistemas.
+El sistema A es un sistema de punto de venta utilizado por los cajeros de un supermercado. 
+Los cajeros escanean los productos que compran los clientes y el sistema registra las cantidades, precios y demás información relacionada con la venta.
+
+El sistema B es un sistema ERP utilizado por empleados de distintas áreas de la empresa. Una de ellas es el área de gestión de stock, 
+que se encarga de controlar las entradas y salidas de productos y de solicitar al área de compras que realice los pedidos necesarios para mantener el stock.
+
+Para poder realizar esta tarea, el área de gestión de stock necesita conocer en todo momento la cantidad disponible de cada producto. 
+Actualmente, esta información se carga manualmente, lo que lleva tiempo y no permite trabajar con información actualizada en tiempo real.
+
+El cliente solicita integrar ambos sistemas para que, cada vez que se realice una venta en el sistema A, el consumo de los productos
+se registre automáticamente en el sistema B.
+
+La integración deberá contar con un endpoint que reciba la notificación de una venta. El JSON recibido tendrá el siguiente formato:
+
+{
+  "ventaId": 154872,
+  "fecha": "2026-09-24T16:20:35-03:00",
+  "cajeroId": 42,
+  "productos": [
+    {
+      "codigo": "7791234567890",
+      "cantidad": 2,
+      "precioUnitario": 1250.50
+    },
+    {
+      "codigo": "7799876543210",
+      "cantidad": 1,
+      "precioUnitario": 3500.00
+    }
+  ]
+}
+
+Una vez recibida y procesada la venta, la integración deberá registrar el movimiento de stock en el sistema B mediante una petición POST a:
+
+http://localhost:3000/api/stock/movimiento
+
+La API recibe el siguiente JSON:
+
+{
+  "tipoMovimiento": "SALIDA",
+  "fecha": "2026-09-24T16:20:35-03:00",
+  "referencia": "VENTA-154872",
+  "productos": [
+    {
+      "codigoProducto": "7791234567890",
+      "cantidad": 2
+    },
+    {
+      "codigoProducto": "7799876543210",
+      "cantidad": 1
+    }
+  ]
+}
+Requisitos
+El endpoint debe recibir y procesar la información de la venta.
+La información recibida del sistema A deberá transformarse al formato requerido por el sistema B.
+El endpoint no debe encargarse directamente de realizar la comunicación con el sistema B.
+La solución deberá estar estructurada de manera que cada componente tenga una responsabilidad claramente definida.
+La estructura del proyecto y la división de responsabilidades quedan a criterio del alumno.
+No es necesario implementar realmente el sistema A ni el sistema B. La API del sistema B puede considerarse ficticia.
+El desarrollo final debe ser flexible y permitir incorporar, reemplazar o modificar los conectores utilizados para 
+comunicarse con sistemas externos sin tener que modificar innecesariamente el resto de la aplicación. 
+En un escenario real, estos sistemas pueden cambiar de API, proveedor o implementación, por lo que la 
+solución debe estar preparada para adaptarse a estos cambios.
