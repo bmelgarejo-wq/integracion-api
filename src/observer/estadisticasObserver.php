@@ -1,6 +1,6 @@
 <?php
 
-//le avisa al sistema C (estadisticas) de la venta
+//le avisa al sistema C (estadisticas) cuando hay una venta
 class estadisticasObserver implements ventaObserver{
     private ventaAestadisticaMapper $mapper;
     private conectorEstadisticas $conector;

@@ -2,7 +2,7 @@
 
 class ventaController{
     private procesarVentaService $service;
-    private array $traductores; //lista de traductorVenta, uno por cada sistema que manda ventas
+    private array $traductores; //uno por cada sistema que manda ventas (A, A2)
 
     public function __construct(procesarVentaService $service, array $traductores){
         $this->service = $service;
@@ -35,7 +35,7 @@ class ventaController{
             return;
         }
 
-        // busco el traductor que entiende este formato y le pido la venta
+        // recorro los traductores hasta encontrar el que entiende este json, y le pido la venta
         $venta = null;
         foreach ($this->traductores as $traductor){
             if ($traductor->puedeTraducir($datos)){
@@ -52,13 +52,14 @@ class ventaController{
 
         $resultado = $this->service->procesar($venta);
 
-        // la venta ya está guardada, si algún sistema falló queda pendiente y se reintenta después
+        // si ya estaba guardada no se procesa de nuevo
         if ($resultado === "duplicada"){
             http_response_code(200);
             echo json_encode(['mensaje' => 'La venta ya estaba registrada, no se procesa de nuevo']);
             return;
         }
 
+        // la venta se guardó pero algún sistema falló, queda pendiente para reintentar
         if ($resultado === "pendiente"){
             http_response_code(202);
             echo json_encode(['mensaje' => 'Venta recibida, quedó pendiente el envío a algún sistema']);

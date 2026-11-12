@@ -3,38 +3,38 @@
 //no guarda ni envía por su cuenta, le pide al repository que guarde y a los observers que avisen
 class procesarVentaService {
     private ventaRepository $repository;
-    private array $observadores; //lista de ventaObserver, uno por cada sistema al que hay que avisar
+    private array $observadores; //lista de observers, uno por cada sistema al que hay que avisar (stock, estadisticas)
 
-    /*el repository y los observers se reciben desde afuera (desde arranque.php)
-    en vez de crearlos aca con new asi se puede agregar un sistema nuevo sin tocar esta clase*/
+    /*el repository y los observers se reciben desde afuera (desde el index.php)
+    en vez de crearlos aca con new, asi se puede sumar un sistema nuevo sin tocar esta clase*/
     public function __construct (ventaRepository $repository, array $observadores){
         $this->repository = $repository;
         $this->observadores = $observadores;
     }
 
-    // recibe una venta, la guarda y avisa a cada sistema. Devuelve "duplicada", "procesada" o "pendiente"
+    // recibe una venta, la guarda y le avisa a cada sistema. Devuelve "duplicada", "procesada" o "pendiente"
     public function procesar(ventaDTO $venta): string {
-        $destinos = [];
+        $destinos = []; //lista vacia para llenarla con el nombre de cada destino
         foreach ($this->observadores as $observador){
-            $destinos[] = $observador->nombre(); //saco el nombre de cada destino para guardarlo
+            $destinos[] = $observador->nombre();
         }
 
-        //primero guardo, asi si B o C fallan la venta no se pierde
+        //guardo primero, asi si B o C fallan la venta no se pierde
         $esNueva = $this->repository->guardar($venta, $destinos);
         if (!$esNueva){
-            return "duplicada"; //ya estaba, no se avisa de nuevo a nadie
+            return "duplicada"; //ya estaba guardada, no le aviso a nadie de nuevo
         }
 
         $todoOk = true;
         foreach ($this->observadores as $observador){
             if (!$this->avisar($observador, $venta)){
-                $todoOk = false; //si uno falla sigo con los demas igual
+                $todoOk = false; //si uno falla igual sigo con los demas
             }
         }
         return $todoOk ? "procesada" : "pendiente";
     }
 
-    // vuelve a intentar los envios que quedaron pendientes. Devuelve cuantos reintento
+    // vuelve a mandar lo que quedo pendiente. Devuelve cuantos reintento
     public function reintentarPendientes(): int {
         $cantidad = 0;
         foreach ($this->repository->pendientes() as $envio){
@@ -43,7 +43,7 @@ class procesarVentaService {
                 continue;
             }
             foreach ($this->observadores as $observador){
-                if ($observador->nombre() === $envio['destino']){ //solo reintento el destino que fallo
+                if ($observador->nombre() === $envio['destino']){ //reintento solo el destino que fallo
                     $this->avisar($observador, $venta);
                     $cantidad++;
                 }

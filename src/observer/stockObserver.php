@@ -1,6 +1,6 @@
 <?php
 
-//le avisa al sistema B (stock) de la venta
+//le avisa al sistema B (stock) cuando hay una venta
 class stockObserver implements ventaObserver{
     private ventaAmovimientoMapper $mapper;
     private conectorStock $conector;
