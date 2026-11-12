@@ -1,6 +1,6 @@
 <?php
 
-class movimientoProducto {
+class movimientoProductoDTO {
     public string $codigoProducto; //en la consigna estaba puesto con ""
     public int $cantidad;
 

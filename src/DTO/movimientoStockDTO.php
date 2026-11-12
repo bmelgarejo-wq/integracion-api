@@ -1,6 +1,6 @@
 <?php
 
-class movimientoStock { //molde de lo que se le manda al sistema B, asi tiene que quedar lo q mande
+class movimientoStockDTO { //molde de lo que se le manda al sistema B, asi tiene que quedar lo q mande
     public string $tipoMovimiento; //salida
     public string $fecha;
     public string $referencia;
